@@ -2,12 +2,11 @@ package api.thanks.memberapi.api;
 
 import api.thanks.memberapi.model.Member;
 import api.thanks.memberapi.repository.MemberRepository;
+import com.datastax.driver.core.utils.UUIDs;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.websocket.server.PathParam;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,22 +35,28 @@ public class MemberApi {
     }
 
     @PostMapping("/members")
-    public ResponseEntity saveMember(Member member){
+    public ResponseEntity saveMember(@RequestBody Member member){
+        member.setId(UUIDs.timeBased());
         return ResponseEntity.ok().body(memberRepository.save(member));
     }
 
     @PutMapping("/members/{id}")
-    public ResponseEntity updateMember(@PathParam("id") UUID id, Member member){
-        Member expectedMember = memberRepository.findById(id).get();
-        //TODO fixme?
-        return ResponseEntity.ok().body(memberRepository.save(member));
+    public ResponseEntity updateMember(@PathVariable("id") UUID id,@RequestBody Member member){
+        Member expectedMember = memberRepository.findMemberById(id);
+        if(expectedMember !=null && expectedMember.getId().equals(member.getId())){
+            return ResponseEntity.ok().body(memberRepository.save(member));
+        }
+        return ResponseEntity.badRequest().body(id+" not found");
     }
 
     @DeleteMapping("/members/{id}")
-    public ResponseEntity deleteMember(@PathParam("id") UUID id){
-        Member expectedMember = memberRepository.findById(id).get();
-        memberRepository.delete(expectedMember);
-        return ResponseEntity.ok().build();
+    public ResponseEntity deleteMember(@PathVariable("id") UUID id){
+        Member expectedMember = memberRepository.findMemberById(id);
+        if(expectedMember !=null && expectedMember.getId().equals(id)){
+            memberRepository.delete(expectedMember);
+            return ResponseEntity.ok().body(id);
+        }
+        return ResponseEntity.badRequest().body(id+" not found");
     }
 
 }

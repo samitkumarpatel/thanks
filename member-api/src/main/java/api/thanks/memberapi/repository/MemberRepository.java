@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface MemberRepository extends CassandraRepository<Member,UUID> {
     @AllowFiltering
-    List<Member> findMemberById(final UUID id);
+    Member findMemberById(final UUID id);
 }

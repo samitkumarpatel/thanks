@@ -1,10 +1,17 @@
+DROP KEYSPACE test;
 CREATE KEYSPACE test WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
 USE test;
 
-CREATE TYPE history(
-  id uuid ,
-  getfrom text,
-  date timestamp
+CREATE TYPE address(
+  country varchar,
+  city varchar,
+  pin varchar
+);
+
+CREATE TYPE contact(
+  email varchar,
+  mobile varchar,
+  llt varchar
 );
 
 CREATE TABLE member (
@@ -18,8 +25,15 @@ CREATE TABLE member (
   status boolean,
   technology list<text>,
   points int,
-  history list<frozen<history>>
+  address map<text,frozen<address>>,
+  contact map<text,frozen<contact>>,
+  created_date timestamp,
+  update_date timestamp
 );
 
-INSERT INTO test.member(id,password,firstname,lastname,status) VALUES(now(),'xxxxx','testf','testl',true);
-INSERT INTO test.member(id,password,firstname,lastname,status) VALUES(now(),'xxxxx','testf1','testl1',true);
+CREATE TABLE history(
+  id uuid PRIMARY KEY,
+  from_id uuid,
+  point int,
+  date timestamp
+);
