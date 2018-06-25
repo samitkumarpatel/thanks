@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,13 +39,18 @@ public class MemberApi {
     @PostMapping("/members")
     public ResponseEntity saveMember(@RequestBody Member member){
         member.setId(UUIDs.timeBased());
+        member.setCreatedDate(new Date(System.currentTimeMillis()));
+        member.setUpdateDate(member.getCreatedDate());
         return ResponseEntity.ok().body(memberRepository.save(member));
     }
 
     @PutMapping("/members/{id}")
     public ResponseEntity updateMember(@PathVariable("id") UUID id,@RequestBody Member member){
+        //TODO need to be refactor 
         Member expectedMember = memberRepository.findMemberById(id);
         if(expectedMember !=null && expectedMember.getId().equals(member.getId())){
+            member.setPoints(expectedMember.getPoints());
+            member.setUpdateDate(new Date(System.currentTimeMillis()));
             return ResponseEntity.ok().body(memberRepository.save(member));
         }
         return ResponseEntity.badRequest().body(id+" not found");

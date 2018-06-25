@@ -1,12 +1,10 @@
 package api.thanks.memberapi.model;
 
 import com.datastax.driver.core.DataType;
+import jnr.x86asm.Mem;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.core.mapping.CassandraType;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.cassandra.core.mapping.*;
 
 import java.util.Date;
 import java.util.List;
@@ -33,17 +31,18 @@ public class Member {
     private boolean status;
     private List<String> technology;
     private int points;
-    @CassandraType(type = DataType.Name.UDT,userTypeName = "address")
-    private Map<String, Address> address;
 
-    @CassandraType(type = DataType.Name.UDT,userTypeName = "contact")
-    private Map<String, Address> contact;
+    //TODO need to look how to achieve this with map - and yes we have to change the db structure as well
+    @CassandraType(type = DataType.Name.UDT,userTypeName = "address",
+            typeArguments = DataType.Name.CUSTOM)
+    private Address address;
+    @CassandraType(type = DataType.Name.UDT,userTypeName = "address",
+            typeArguments = DataType.Name.CUSTOM)
+    private Contact contact;
 
     @Column("created_date")
     private Date createdDate;
     @Column("update_date")
     private Date updateDate;
-
-
 
 }
