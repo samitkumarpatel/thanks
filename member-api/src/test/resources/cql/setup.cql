@@ -1,4 +1,4 @@
-//DROP KEYSPACE IF EXISTS test;
+DROP KEYSPACE IF EXISTS test;
 
 CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
 USE test;
