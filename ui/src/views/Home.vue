@@ -31,10 +31,9 @@
         </div>
         <div class="col">
           <strong>Your Points</strong><hr/>
-
         </div>
         <div class="col">
-          <strong>History</strong><hr/>
+          <strong @click="redirect">History</strong><hr/>
         </div>
       </div>
     </section>
@@ -43,6 +42,7 @@
 
 <script>
 import ApplicationError from '@/components/ApplicationError.vue'
+
 export default {
   name: 'home',
   components: {
@@ -56,6 +56,10 @@ export default {
         message : 'Internal server error'
       },
       error : false
+    }
+  },methods: {
+    redirect() {
+      router.go("/team");
     }
   },
 }
