@@ -26,7 +26,8 @@ public class Member {
     private String firstname;
     private String lastname;
     private String role;
-    private String team;
+    @Column("team_uuid")
+    private UUID teamId;
     private String empid;
     private boolean status;
     private List<String> technology;

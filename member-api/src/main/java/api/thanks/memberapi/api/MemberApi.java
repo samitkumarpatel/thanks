@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +42,16 @@ public class MemberApi {
         Member m = memberRepository.findMemberById(id);
         if(m!=null){
             return ResponseEntity.ok().body(memberRepository.findMemberById(id));
+        }
+        throw new MemberNotFoundException("member not found");
+    }
+
+    @GetMapping("/members/filter")
+    public ResponseEntity getMemberByTeamId(@RequestParam UUID teamId){
+        log.log(Level.INFO,"Invoked getMemberByTeamId for teamId :{0} ",teamId);
+        List<Member> members = memberRepository.findMemberByTeamId(teamId);
+        if(members!=null){
+            return ResponseEntity.ok().body(members);
         }
         throw new MemberNotFoundException("member not found");
     }
