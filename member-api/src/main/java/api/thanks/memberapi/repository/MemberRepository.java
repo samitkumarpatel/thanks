@@ -10,4 +10,7 @@ import java.util.UUID;
 public interface MemberRepository extends CassandraRepository<Member,UUID> {
     @AllowFiltering
     Member findMemberById(final UUID id);
+
+    @AllowFiltering
+    List<Member> findMemberByTeamId(final UUID teamId);
 }

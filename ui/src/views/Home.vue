@@ -6,7 +6,7 @@
     <section>
       <div class="row">
         <div class="col">
-          <strong>Your profile</strong>
+          <strong>Profile</strong>
           <hr/>
           <table class="table table-striped">
             <tbody>
@@ -30,8 +30,8 @@
           </table>
         </div>
         <div class="col">
-          <strong>Your Points</strong><hr/>
-
+          <strong>Points</strong><hr/>
+          <h4>Total Points : <span class="badge badge-success">10</span></h4>
         </div>
         <div class="col">
           <strong>History</strong><hr/>
@@ -43,6 +43,7 @@
 
 <script>
 import ApplicationError from '@/components/ApplicationError.vue'
+
 export default {
   name: 'home',
   components: {
@@ -57,6 +58,8 @@ export default {
       },
       error : false
     }
+  },methods: {
+    
   },
 }
 </script>
