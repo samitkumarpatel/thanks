@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.UUID;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api/v1")
 public class HistoryApi {
     @Autowired
     HistoryRepository historyRepository;
