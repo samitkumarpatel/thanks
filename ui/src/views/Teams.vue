@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import ApplicationError from '@/components/ApplicationError.vue'
+import ApplicationError from '@/components/ApplicationError.vue';
 export default {
     name : 'teams',
     components: {
@@ -60,7 +60,9 @@ export default {
         submit() {
             console.log('form submited');
         }
-    },
+    },created : function(){
+      
+    }
 }
 </script>
 

@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Teams from './views/Teams.vue'
 import Members from './views/Members.vue'
-
+import Login from './views/Login.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -28,6 +28,11 @@ export default new Router({
       path: '/members',
       name: 'members',
       component: Members
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ]
 })

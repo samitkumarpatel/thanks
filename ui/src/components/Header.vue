@@ -7,12 +7,17 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               
                 <ul class="navbar-nav ml-auto">
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                    
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/teams">create team</router-link>
+                        <router-link class="nav-link" to="/teams">Team</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/members" class="nav-link">create member</router-link>
+                        <router-link to="/members" class="nav-link">Member</router-link>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -20,7 +25,7 @@
                         settings
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">action</a>
+                        <router-link class="dropdown-item" to="/login">login</router-link>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">action</a>
                         </div>
@@ -40,8 +45,12 @@
                 
             }
         },methods: {
-            
-        },
+            init(){
+                console.log('init execuated!');
+            }
+        }, created : function(){
+            this.init();
+        }
     };
 </script>
 
