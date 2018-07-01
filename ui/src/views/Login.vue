@@ -1,6 +1,6 @@
 <template>
     <div id="login">
-        <ApplicationError :error="error" :value="errorTxt"/>
+        <ApplicationError :details="errorTxt"/>
         <div class="login-clean">
             <form @submit.prevent="doLogin">
                 <h2 class="sr-only">Login Form</h2>
@@ -31,10 +31,10 @@ export default {
           email: '',
           password : '',
           errorTxt: {
+                error : false,
                 status : 500,
                 message : 'Internal server error'
-            },
-            error : false
+            }
       }
   },
   methods: {

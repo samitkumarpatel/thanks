@@ -1,6 +1,6 @@
 <template>
     <div id="ui_members">
-        <ApplicationError :error="error" :value="errorTxt"/>
+        <ApplicationError :details="errorTxt"/>
         <h2>{{title}}</h2>
         <hr/>
         <section>
@@ -93,10 +93,10 @@ export default {
     return {
       title: "create a member",
       errorTxt: {
+        error : false,
         status: 500,
         message: "Internal server error"
-      },
-      error: false
+      }
     };
   },methods: {
       submit() {

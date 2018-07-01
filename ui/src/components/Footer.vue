@@ -13,5 +13,7 @@
 <style scoped>
     #ui__footer{
         margin-top: 30px;
+        text-align: right;
+        color: gray;
     }
 </style>

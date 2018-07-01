@@ -1,6 +1,6 @@
 <template>
     <div id="ui_teams">
-        <ApplicationError :error="error" :value="errorTxt"/>
+        <ApplicationError :details="errorTxt"/>
         <h2>{{title}}</h2>
         <hr/>
         <section>
@@ -51,10 +51,10 @@ export default {
         return {
             title: 'create a teams',
             errorTxt: {
+                error : false,
                 status : 500,
                 message : 'Internal server error'
-            },
-            error : false
+            }
         }
     },methods: {
         submit() {

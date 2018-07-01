@@ -1,7 +1,7 @@
 <template>
     <div id="ui__error">
-        <div class="alert alert-danger" role="alert" v-if="error">
-            {{value}}
+        <div class="alert alert-danger" role="alert" v-if="details.error">
+            {{details}}
         </div>
     </div>
 </template>
@@ -10,16 +10,13 @@
     export default {
         name : 'application_error',
         props: {
-            value: {
+            details: {
                 type: Object,
                 default:{
+                    error : false,
                     status : 500,
                     message : 'Internal server error'
                 } 
-            },
-            error: {
-                type: Boolean,
-                default:false 
             }
         }
     }

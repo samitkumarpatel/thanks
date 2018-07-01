@@ -1,57 +1,29 @@
 <template>
   <div class="ui__home">
-    <ApplicationError :error="error" :value="errorTxt"/>
-    <h2>{{title}}</h2>
-    <hr/>
     <section>
-      <div class="row">
-        <div class="col">
-          <strong>Profile</strong>
-          <hr/>
-          <table class="table table-striped">
-            <tbody>
-              <tr>
-                <td>Name</td>
-                <td>NA</td>
-              </tr>
-              <tr>
-                <td>Team</td>
-                <td>NA</td>
-              </tr>
-              <tr>
-                <td>Status</td>
-                <td>NA</td>
-              </tr>
-              <tr>
-                <td>Other</td>
-                <td>NA</td>
-              </tr>
-            </tbody>
-          </table>
+      <ApplicationError :details="errorTxt"/>
+    </section>
+    <section id="tab__view">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link" id="home-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">History</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#points" role="tab" aria-controls="points" aria-selected="false">Points</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+            <History :history="[1,2,3,4]"/>
         </div>
-        <div class="col">
-          <strong>Points</strong><hr/>
-          <h4>Total Points : <span class="badge badge-success">10</span></h4>
-          <br/>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <Profile :profile="member"/>
         </div>
-        <div class="col">
-          <strong>History</strong><hr/>
-
-          <div class="card" v-for="(x,index) in [1,2,3]" :key="index">
-            <div class="card-header" id="headingOne">
-              <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" :data-target="'#collapseOne'+index" aria-expanded="true" :aria-controls="'collapseOne'+index">
-                  Name : {{index}} has given #5 points
-                </button>
-              </h5>
-            </div>
-            <div :id="'collapseOne'+index" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-              <div class="card-body">
-                Details to be publish for - {{index}}
-              </div>
-            </div>
-          </div>
-
+        <div class="tab-pane fade show active" id="points" role="tabpanel" aria-labelledby="points-tab">
+            <Points :points="member.points"/>
         </div>
       </div>
     </section>
@@ -59,30 +31,47 @@
 </template>
 
 <script>
-import ApplicationError from '@/components/ApplicationError.vue'
-
+import ApplicationError from "@/components/ApplicationError.vue";
+import MemberApiService from "@/service/member.service.js";
+import Profile from "@/components/Profile.vue";
+import History from "@/components/History.vue";
+import Points from "@/components/Points.vue";
 export default {
-  name: 'home',
+  name: "home",
   components: {
-    ApplicationError
+    ApplicationError,Profile,History,Points
   },
   data() {
     return {
-      title: 'dashboard',
-      errorTxt: {
-        status : 500,
-        message : 'Internal server error'
-      },
-      error : false
-    }
-  },methods: {
-    
+      title: "dashboard",
+      errorTxt: {},
+      member: {}
+    };
   },
-}
+  methods: {},
+  created: function() {
+    var that = this;
+    //service call
+    MemberApiService.getById("be0e6e00-7a4c-11e8-a6a3-ab751869f511", function(
+      res,
+      err
+    ) {
+      if (err) {
+        that.errorTxt = {
+          error: true,
+          status: 500,
+          message: "Something went wrong!"
+        };
+      } else {
+        that.member = res.data;
+      }
+    });
+  }
+};
 </script>
 <style scoped>
-  div.col{
-    text-align:center;
-  }
+div.col {
+  text-align: center;
+}
 </style>
 
