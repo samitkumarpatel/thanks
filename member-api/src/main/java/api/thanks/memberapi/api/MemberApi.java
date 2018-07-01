@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin("http://localhost:8080")
 public class MemberApi {
 
     @Autowired

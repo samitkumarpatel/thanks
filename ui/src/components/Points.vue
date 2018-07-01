@@ -1,8 +1,17 @@
 <template>
     <div id="member__points">
-        <h4>you have earned <span class="badge badge-success">{{points}}</span> points as of now !</h4>
-        <br/>
-        <p><a href="#">click</a> to give points to other </p>
+        <div class="row">
+            <div class="col">
+                <h4>Your total points : <span class="badge badge-success">{{points}}</span> !</h4>
+                <br/>
+                <p><a href="#">click</a> to give points to other </p>
+            </div>
+            <div class="col">
+                <strong>Recent History</strong>
+                <hr/>
+            </div>
+        </div>
+        
     </div>
 </template>
 

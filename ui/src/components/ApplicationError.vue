@@ -1,7 +1,8 @@
 <template>
     <div id="ui__error">
         <div class="alert alert-danger" role="alert" v-if="details.error">
-            {{details}}
+            <h4 class="alert-heading">{{details.status}}</h4>
+            <p>{{details.message}}</p>
         </div>
     </div>
 </template>

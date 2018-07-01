@@ -1,9 +1,9 @@
 <template>
   <div class="ui__home">
-    <section>
+    <section v-if="errorTxt.error">
       <ApplicationError :details="errorTxt"/>
     </section>
-    <section id="tab__view">
+    <section id="tab__view" v-else>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a class="nav-link" id="home-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">History</a>
@@ -48,20 +48,21 @@ export default {
       member: {}
     };
   },
-  methods: {},
+  methods: {
+    hasError(err){
+      this.errorTxt = {
+          error: true,
+          status: 500,
+          message: err.message
+      };
+    }
+  },
   created: function() {
     var that = this;
     //service call
-    MemberApiService.getById("be0e6e00-7a4c-11e8-a6a3-ab751869f511", function(
-      res,
-      err
-    ) {
+    MemberApiService.getById("be0e6e00-7a4c-11e8-a6a3-ab751869f511", function(res,err) {
       if (err) {
-        that.errorTxt = {
-          error: true,
-          status: 500,
-          message: "Something went wrong!"
-        };
+        that.hasError(err);
       } else {
         that.member = res.data;
       }
