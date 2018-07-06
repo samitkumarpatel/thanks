@@ -49,14 +49,17 @@ export default {
     },
     data() {
         return {
-            title: 'create a teams',
-            errorTxt: {
-                error : false,
-                status : 500,
-                message : 'Internal server error'
-            }
+            title: 'Fill to create a team',
+            errorTxt: {}
         }
     },methods: {
+        hasError(err){
+            this.errorTxt = {
+                error: true,
+                status: 500,
+                message: err.message
+            };
+        },
         submit() {
             console.log('form submited');
         }
