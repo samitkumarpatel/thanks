@@ -46,28 +46,32 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="role">Your Role</label>
                                     <input type="text" class="form-control" id="role" placeholder="role" v-model="member.role">
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="team">Part of which Team ?</label>
-                                    <select id="team" class="form-control" v-model="member.team">
-                                        <option selected>Choose team...</option>
-                                        <option>test</option>
-                                    </select>
-                                    <label for="createTeamLink">
-                                        <small> not in the list? <router-link to="/teams">click</router-link> to create one</small>
-                                    </label>
-                                </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="empid">empid</label>
                                     <input type="text" class="form-control" id="empid" v-model="member.empid">
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="team">Part of which Team ?</label>
+                                    <select id="team" class="form-control" v-model="member.teamId">
+                                        <option disabled value="">Choose team...</option>
+                                        <option v-for="team of teams" :key="team.id" :value="team.id">{{team.name}}</option>
+                                    </select>
+                                    <label v-if="teamError" style="color:red">
+                                        <small> we are facing issue with finding and creating team ! please try later </small>
+                                    </label>
+                                    <label for="createTeamLink" v-else>
+                                        <small> not in the list? <router-link to="/teams">click</router-link> to create one</small>
+                                    </label>
+                                </div>
+                                
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="role">Technology stack <small>seperate them with comma ,</small> </label>
+                                    <label for="role">Technology stack <br/> <small>seperate them with comma ,</small> </label>
                                     <textarea class="form-control" id="techstack" placeholder="tech stack" v-model="member.technology"/>
                                 </div>
                                 <div class="form-group col-md-6"></div>
@@ -79,6 +83,9 @@
                     <ul>
                         <li v-for="(ve,index) of validationError" :key="index">{{ve}}</li>
                     </ul>
+                    <div class="alert alert-success" role="alert" v-if="suc.show">
+                     <h3>{{suc.status}}</h3>{{suc.msg}}
+                    </div>
                 </div>
             </div>
             
@@ -89,6 +96,8 @@
 <script>
 import ApplicationError from "@/components/ApplicationError.vue";
 import MemberApiService from "@/service/member.service.js"
+import TeamApiService from "@/service/team.service.js"
+import Member from "@/service/member.js"
 export default {
   name: "members",
   components: {
@@ -98,26 +107,15 @@ export default {
     return {
       title: "Fill to create a member",
       errorTxt: {},
-      member : {
-        password : null,
-        firstname : null,
-        lastname : null,
-        role : null,
-        team : null,
-        empid : null,
-        technology : null,
-        address : {
-            country : null,
-            city : null,
-            pin : null
-        },
-        contact : {
-            email : null,
-            mobile : null,
-            llt : null
-        }
-      },
-      validationError : []
+      teamError : false,
+      teams : [],
+      member : Member,
+      validationError : [],
+      suc : {
+          show : false,
+          status : '',
+          msg : ''
+      }
     };
   },
   methods: {
@@ -127,6 +125,7 @@ export default {
             status: 500,
             message: err.message
         };
+        $("ui__error").focus();
     },
     submit(e) {
         //validation check
@@ -137,18 +136,18 @@ export default {
         if(!this.member.lastname){
             this.validationError.push('lastname should not be empty');
         }
-        if(!this.member.team){
+        if(!this.member.teamId){
             this.validationError.push('team should not be empty');
         }
         if(!this.member.empid){
             this.validationError.push('empId should not be empty');
         }
-        if(!this.member.technology){
+        if(!this.member.technology) {
             this.validationError.push('technology should not be empty');
         }else{
             var d = this.member.technology;
-            this.member.technology = d.split(',');
-        }
+            this.member.technology=d.split(',');
+        } 
         //submit the form 
         if(this.validationError.length == 0){
             var that =this;
@@ -156,14 +155,26 @@ export default {
                 if(error){
                     that.hasError(error);
                 }else{
-                    //TODO success message has be to shown
-                    console.log(success);
+                    that.member.technology='';
+                    that.suc.show=true;
+                    that.suc.status=success.status;
+                    that.suc.msg=success.data;
                 }
-            })
+            });
             return true;
         }
         e.preventDefault();
     }
+  },created:function(){
+      this.teams = [];
+      var that=this;
+      TeamApiService.getAll(function(success,error){
+          if(error){
+              that.teamError=true;
+          }else{
+              that.teams=success.data;
+          }
+      });
   }
 };
 </script>
