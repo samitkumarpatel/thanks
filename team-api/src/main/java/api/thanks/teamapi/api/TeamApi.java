@@ -5,6 +5,8 @@ import api.thanks.teamapi.model.Team;
 import api.thanks.teamapi.repository.TeamRepository;
 import com.datastax.driver.core.utils.UUIDs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,8 @@ public class TeamApi {
 
     @Autowired
     TeamRepository teamRepository;
+
+    private static String jsonKeyConstant = "{\"error\": \"";
 
     @GetMapping("/teams")
     public ResponseEntity getAll(){
@@ -57,5 +61,10 @@ public class TeamApi {
             return ResponseEntity.ok().body(id + " - deleted successfully");
         }
         throw new TeamNotFoundException(id + " - not found");
+    }
+
+    @ExceptionHandler(TeamNotFoundException.class)
+    public ResponseEntity handleTeamNotFoundException(TeamNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON_UTF8).body(jsonKeyConstant+e.getMessage()+ "\"}");
     }
 }

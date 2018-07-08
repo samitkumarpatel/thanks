@@ -9,10 +9,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +33,8 @@ public class MemberApi {
 
     @Autowired
     MemberRepository memberRepository;
+
+    private static String jsonKeyConstant = "{\"error\": \"";
 
     @GetMapping("/members")
     public ResponseEntity getAll(){
@@ -97,12 +103,8 @@ public class MemberApi {
     }
 
     @ExceptionHandler(MemberNotFoundException.class)
-    public final ResponseEntity<ErrorDetails> handleRuntimeExceptions(MemberNotFoundException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),request.getDescription(false),500);
-        if(ex instanceof MemberNotFoundException) {
-            errorDetails= new ErrorDetails(new Date(), ex.getMessage(),request.getDescription(false),400);
-        }
-        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public final ResponseEntity MemberNotFoundExceptionHandler(MemberNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON_UTF8).body(jsonKeyConstant + e.getMessage() + "\"}");
     }
-
 }

@@ -85,8 +85,63 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <alias>thanks-member-api</alias>
+                                    <name>samitkumarpatel/${project.artifactId}</name>
+                                    <build>
+                                        <from>openjdk:8</from>
+                                        <tags>
+                                            <tag>latest</tag>
+                                            <tag>${project.version}</tag>
+                                        </tags>
+                                        <labels>
+                                            <api.thanks.memberapi.gitrevision>${git.commit.id}</api.thanks.memberapi.gitrevision>
+                                            <api.thanks.memberapi.version>${project.version}</api.thanks.memberapi.version>
+                                            <api.thanks.memberapi.artifactid>${project.artifactId}</api.thanks.memberapi.artifactid>
+                                        </labels>
+                                        <assembly>
+                                            <descriptorRef>artifact</descriptorRef>
+                                        </assembly>
+                                        <ports>
+                                            <port>8080</port>
+                                            <port>8081</port>
+                                        </ports>
+                                        <cmd>
+                                            <shell>java -XX:CICompilerCount=2 -XX:InitialHeapSize=128m -XX:MaxHeapSize=256m -XX:MaxNewSize=64m -XX:MinHeapDeltaBytes=524288 -XX:NewSize=32m -XX:OldSize=128m -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC -jar /maven/${project.artifactId}-${project.version}.jar</shell>
+                                        </cmd>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
