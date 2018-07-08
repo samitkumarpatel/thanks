@@ -1,8 +1,9 @@
 <template>
     <div id="ui__error">
         <div class="alert alert-danger" role="alert" v-if="details.error">
-            <h4 class="alert-heading">{{details.status}}</h4>
-            <p>{{details.message}}</p>
+            <h4 class="alert-heading">Http status: {{details.status}}</h4>
+            <p>Reason : {{details.message}}</p>
+            <p>Something went wrong! Please try after sometime</p>
         </div>
     </div>
 </template>
@@ -13,11 +14,7 @@
         props: {
             details: {
                 type: Object,
-                default:{
-                    error : false,
-                    status : 500,
-                    message : 'Internal server error'
-                } 
+                default: null
             }
         }
     }

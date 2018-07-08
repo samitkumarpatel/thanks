@@ -1,58 +1,61 @@
 <template>
     <div id="ui_members">
         <ApplicationError :details="errorTxt"/>
-        <h2>{{title}}</h2>
+        <h2>{{title}} - {{memberId}}</h2>
         <hr/>
-        <section>
+        <section v-if="response">
+            <Success :success="response"/>
+        </section>
+        <section v-else>
             <div class="row">
                 <div class="col">
                         <form v-on:submit.prevent="submit">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="firstname">Firstname</label>
-                                    <input type="text" class="form-control" id="firstname" placeholder="firstname" v-model="member.firstname">
+                                    <input type="text" class="form-control" id="firstname" v-model="member.firstname" :class="member.firstname ? 'valid' : 'invalid'">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="lastname">Lastname</label>
-                                    <input type="text" class="form-control" id="lastname" placeholder="lastname" v-model="member.lastname">
+                                    <input type="text" class="form-control" id="lastname" v-model="member.lastname" :class="member.lastname ? 'valid' : 'invalid'">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="role">Country</label>
-                                    <input type="text" class="form-control" id="country" placeholder="country" v-model="member.address.country">
+                                    <input type="text" class="form-control" id="country" v-model="member.address.country">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="team">City</label>
-                                    <input type="text" class="form-control" id="city" placeholder="city" v-model="member.address.city">
+                                    <input type="text" class="form-control" id="city" v-model="member.address.city">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="empid">Pin Code</label>
-                                    <input type="text" class="form-control" id="pincode" placeholder="pin code" v-model="member.address.pin">
+                                    <input type="text" class="form-control" id="pincode" v-model="member.address.pin">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="role">email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="email" v-model="member.contact.email">
+                                    <input type="email" class="form-control" id="email" v-model="member.contact.email" :class="member.contact.email ? 'valid' : 'invalid'">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="team">Mobile</label>
-                                    <input type="text" class="form-control" id="mobile" placeholder="mobile" v-model="member.contact.mobile">
+                                    <input type="tel" class="form-control" id="mobile" v-model="member.contact.mobile">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="empid">Landline</label>
-                                    <input type="text" class="form-control" id="llt" placeholder="land line" v-model="member.contact.llt">
+                                    <input type="tel" class="form-control" id="llt" v-model="member.contact.llt">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="role">Your Role</label>
-                                    <input type="text" class="form-control" id="role" placeholder="role" v-model="member.role">
+                                    <input type="text" class="form-control" id="role" v-model="member.role" :class="member.role ? 'valid' : 'invalid'">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="empid">empid</label>
-                                    <input type="text" class="form-control" id="empid" v-model="member.empid">
+                                    <input type="text" class="form-control" id="empid" v-model="member.empid" :class="member.empid ? 'valid' : 'invalid'">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="team">Part of which Team ?</label>
@@ -61,7 +64,7 @@
                                         <option v-for="team of teams" :key="team.id" :value="team.id">{{team.name}}</option>
                                     </select>
                                     <label v-if="teamError" style="color:red">
-                                        <small> we are facing issue with finding and creating team ! please try later </small>
+                                        <small> we are facing issue to finding and creating team ! please try later.. </small>
                                     </label>
                                     <label for="createTeamLink" v-else>
                                         <small> not in the list? <router-link to="/teams">click</router-link> to create one</small>
@@ -71,24 +74,21 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="role">Technology stack <br/> <small>seperate them with comma ,</small> </label>
-                                    <textarea class="form-control" id="techstack" placeholder="tech stack" v-model="member.technology"/>
+                                    <label for="role">Technology stack <br/> <small>seperate them with comma ','</small> </label>
+                                    <textarea class="form-control" id="techstack" v-model="member.technology"/>
                                 </div>
                                 <div class="form-group col-md-6"></div>
                             </div>
+                            <ul>
+                                <li v-for="(ve,index) of validationError" :key="index">{{ve}}</li>
+                            </ul>
                             <button type="submit" class="btn btn-primary">Signup</button>
                         </form>
                 </div>
                 <div class="col-4">
-                    <ul>
-                        <li v-for="(ve,index) of validationError" :key="index">{{ve}}</li>
-                    </ul>
-                    <div class="alert alert-success" role="alert" v-if="suc.show">
-                     <h3>{{suc.status}}</h3>{{suc.msg}}
-                    </div>
+                    
                 </div>
             </div>
-            
         </section>
     </div>
 </template>
@@ -98,24 +98,21 @@ import ApplicationError from "@/components/ApplicationError.vue";
 import MemberApiService from "@/service/member.service.js"
 import TeamApiService from "@/service/team.service.js"
 import Member from "@/service/member.js"
+import Success from "@/views/Success.vue"
 export default {
   name: "members",
   components: {
-    ApplicationError
+    ApplicationError,Success
   },
   data() {
     return {
-      title: "Fill to create a member",
+      title: "Create Member",
       errorTxt: {},
       teamError : false,
       teams : [],
       member : Member,
       validationError : [],
-      suc : {
-          show : false,
-          status : '',
-          msg : ''
-      }
+      response : null
     };
   },
   methods: {
@@ -125,7 +122,6 @@ export default {
             status: 500,
             message: err.message
         };
-        $("ui__error").focus();
     },
     submit(e) {
         //validation check
@@ -136,18 +132,20 @@ export default {
         if(!this.member.lastname){
             this.validationError.push('lastname should not be empty');
         }
+        if(!this.member.contact.email){
+            this.validationError.push('email should not be empty');
+        }
         if(!this.member.teamId){
             this.validationError.push('team should not be empty');
         }
         if(!this.member.empid){
             this.validationError.push('empId should not be empty');
         }
-        if(!this.member.technology) {
-            this.validationError.push('technology should not be empty');
-        }else{
+        if(this.member.technology) {
             var d = this.member.technology;
             this.member.technology=d.split(',');
-        } 
+        }
+
         //submit the form 
         if(this.validationError.length == 0){
             var that =this;
@@ -155,17 +153,14 @@ export default {
                 if(error){
                     that.hasError(error);
                 }else{
-                    that.member.technology='';
-                    that.suc.show=true;
-                    that.suc.status=success.status;
-                    that.suc.msg=success.data;
+                    that.response=success.data;
                 }
             });
             return true;
         }
         e.preventDefault();
     }
-  },created:function(){
+  },created:function() {
       this.teams = [];
       var that=this;
       TeamApiService.getAll(function(success,error){
@@ -175,9 +170,20 @@ export default {
               that.teams=success.data;
           }
       });
-  }
+  },computed: {
+      memberId() {
+          return this.$store.state.memberId; 
+      }
+  },
 };
 </script>
 
 <style scoped>
+    input.invalid {
+        border-left: 5px solid red;
+    }
+    input.valid {
+        border-left: 5px solid green;
+    }
+    
 </style>

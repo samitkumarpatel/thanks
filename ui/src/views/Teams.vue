@@ -9,22 +9,21 @@
                     <form v-on:submit.prevent="submit">
                         <div class="form-group">
                             <label for="teamName">Name of the team</label>
-                            <input type="text" class="form-control" id="teamName" placeholder="Name">
+                            <input type="text" class="form-control" id="teamName" v-model="team.name">
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" id="description" placeholder="about team" />
+                            <textarea class="form-control" id="description" v-model="team.description" />
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="teamId">Team Id</label>
-                                <input type="text" class="form-control" id="teamId">
+                                <input type="text" class="form-control" id="teamId" v-model="team.teamid">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="inputState">admin</label>
-                                <select id="inputState" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
+                                <select id="inputState" class="form-control" v-model="team.adminUid">
+                                    <option disabled value="">Choose a admin...</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-2">
@@ -50,8 +49,14 @@ export default {
     data() {
         return {
             title: 'Fill to create a team',
-            errorTxt: {}
-        }
+            errorTxt: {},
+            team : {
+                teamid : null,
+                name : null,
+                adminUid : null,
+                description: null
+            }
+        }   
     },methods: {
         hasError(err){
             this.errorTxt = {
@@ -61,7 +66,7 @@ export default {
             };
         },
         submit() {
-            console.log('form submited');
+            console.log('form submited'+JSON.stringify(this.team));
         }
     },created : function(){
       

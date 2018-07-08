@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,6 +64,7 @@ public class MemberApi {
         member.setId(UUIDs.timeBased());
         member.setCreatedDate(new Date(System.currentTimeMillis()));
         member.setUpdateDate(member.getCreatedDate());
+        member.setPassword(Base64.getEncoder().encodeToString("changeme".getBytes()));
         return ResponseEntity.ok().body(memberRepository.save(member));
     }
 
@@ -87,6 +85,9 @@ public class MemberApi {
         if(expectedMember !=null && expectedMember.getId().equals(member.getId())){
             member.setPoints(expectedMember.getPoints());
             member.setUpdateDate(new Date(System.currentTimeMillis()));
+            if(member.getPassword()!=null){
+                member.setPassword(Base64.getEncoder().encodeToString(member.getPassword().getBytes()));
+            }
             return ResponseEntity.ok().body(memberRepository.save(member));
         }
         throw new MemberNotFoundException("member not found");
@@ -106,5 +107,12 @@ public class MemberApi {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public final ResponseEntity MemberNotFoundExceptionHandler(MemberNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON_UTF8).body(jsonKeyConstant + e.getMessage() + "\"}");
+    }
+
+    private List parseTechnology(String data){
+        if(!StringUtils.isEmpty(data)){
+            return Arrays.asList(data.split(","));
+        }
+        return null;
     }
 }

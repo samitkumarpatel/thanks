@@ -21,7 +21,7 @@ public class Team {
     private String teamid;
     private String name;
     @Column("member_uuid_as_an_admin")
-    private UUID memberUid;
+    private UUID adminUid;
     private String description;
     @Column("created_date")
     private Date createDate;

@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit">Log In</button>
                 </div>
-                <a @click="signUp" class="forgot">don't have account, click to sing-up?</a>
+                New ? <router-link to="/members">Click</router-link> to signUp
             </form>
         </div>
     </div>
@@ -44,7 +44,7 @@ export default {
       signUp(){
           window.location.href="/team"
       }
-  },
+  }
 };
 </script>
 
