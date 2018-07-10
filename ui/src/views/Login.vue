@@ -39,10 +39,11 @@ export default {
   },
   methods: {
       doLogin() {
-          window.location.href="/home" 
+          this.$store.commit('setMemberId','be0e6e00-7a4c-11e8-a6a3-ab751869f511');
+          this.$router.push("/"); 
       },
       signUp(){
-          window.location.href="/team"
+          this.$router.push("/team");
       }
   }
 };

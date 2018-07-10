@@ -5,6 +5,7 @@ import api.thanks.memberapi.exception.MemberNotFoundException;
 import api.thanks.memberapi.model.Member;
 import api.thanks.memberapi.repository.MemberRepository;
 import com.datastax.driver.core.utils.UUIDs;
+import com.kenai.jnr.x86asm.Mem;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.repository.AllowFiltering;
@@ -102,6 +103,12 @@ public class MemberApi {
         }
         throw new MemberNotFoundException("member not found");
     }
+    /*
+    @GetMapping("/validate/{email}/{password}")
+    public ResponseEntity validateUser(@PathVariable("email") String user,@PathVariable("password")String password){
+        Member m = memberRepository.getMemberByEmailAndPassword("")
+        return ResponseEntity.ok().body(true);
+    }*/
 
     @ExceptionHandler(MemberNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

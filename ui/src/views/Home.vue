@@ -58,15 +58,22 @@ export default {
     }
   },
   created: function() {
+    if(this.memberId==null){
+      this.$router.push("/login");
+    }
     var that = this;
     //service call
-    MemberApiService.getById("be0e6e00-7a4c-11e8-a6a3-ab751869f511", function(res,err) {
+    MemberApiService.getById(this.memberId, function(res,err) {
       if (err) {
         that.hasError(err);
       } else {
         that.member = res.data;
       }
     });
+  },computed: {
+      memberId() {
+          return this.$store.state.memberId; 
+      }
   }
 };
 </script>

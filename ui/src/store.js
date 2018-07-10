@@ -11,8 +11,5 @@ export default new Vuex.Store({
     setMemberId(state,payload){
       state.memberId=payload;
     }
-  },
-  actions: {
-    
   }
 })

@@ -1,7 +1,7 @@
 <template>
     <div id="ui_members">
         <ApplicationError :details="errorTxt"/>
-        <h2>{{title}} - {{memberId}}</h2>
+        <h2>{{title}}</h2>
         <hr/>
         <section v-if="response">
             <Success :success="response"/>
