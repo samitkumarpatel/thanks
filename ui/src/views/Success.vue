@@ -4,11 +4,11 @@
             <h4>SUCCESS!</h4>
             <pre>{{success}}</pre>
         </div>
-        <div>
+        <div v-if="component_type== 'MEMBER'">
             <p>Your default password is "changeme", don't forgot to change!</p>
         </div>
         <div>
-            <p><router-link to="/login">Click to login</router-link> </p>
+            <p><router-link to="/login">Click to login</router-link> | <a href="/home">home</a> </p> 
         </div>
     </div>
 </template>
@@ -20,6 +20,10 @@
             success: {
                 type: Object,
                 default: null
+            },
+            component_type : {
+                type : String,
+                default : "MEMBER"
             }
         },
     }

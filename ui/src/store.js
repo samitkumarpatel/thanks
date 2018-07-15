@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    memberId : null
+    memberId : null,
+    memberDetails : null
   },
   mutations: {
     setMemberId(state,payload){
       state.memberId=payload;
+    },
+    setMemberDetails(state,payload){
+      state.memberDetails=payload;
     }
   }
 })

@@ -15,6 +15,6 @@ public interface MemberRepository extends CassandraRepository<Member,UUID> {
     @AllowFiltering
     List<Member> findMemberByTeamId(final UUID teamId);
 
-    @Query("select m from Member m where u.email=?1 and u.password=?2")
-    Member getMemberByEmailAndPassword(String username,String password);
+    @Query("select * from Member where empid=?0 and password=?1 ALLOW FILTERING")
+    Member findByEmpIdAndPassword(final String empid,final String password);
 }

@@ -55,25 +55,26 @@ export default {
           status: 500,
           message: err.message
       };
+    },
+    init() {
+      var that = this;
+      //service call
+      MemberApiService.getById(this.memberId, function(res,err) {
+        if (err) {
+          that.hasError(err);
+          that.$router.push("/login");
+        } else {
+          that.member = res.data;
+        }
+      });
     }
   },
   created: function() {
-    if(this.memberId==null){
-      this.$router.push("/login");
-    }
-    var that = this;
-    //service call
-    MemberApiService.getById(this.memberId, function(res,err) {
-      if (err) {
-        that.hasError(err);
-      } else {
-        that.member = res.data;
-      }
-    });
+    this.init();
   },computed: {
-      memberId() {
-          return this.$store.state.memberId; 
-      }
+    memberId() {
+        return this.$store.state.memberId; 
+    }
   }
 };
 </script>

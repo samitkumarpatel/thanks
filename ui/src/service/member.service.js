@@ -32,6 +32,12 @@ const MemberApiService = {
     },
     delete(id,callback){
         
+    },
+    logon(empId,password,callback){
+        axios
+            .get(MEMBERS_API_URL+"/validate/"+empId+"/"+password)
+            .then(function(response){callback(response,null)})
+            .catch(function(error){callback(null,error)})
     }
 }
 export default MemberApiService

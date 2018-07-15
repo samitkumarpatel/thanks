@@ -2,6 +2,7 @@ package api.thanks.memberapi.api;
 
 import api.thanks.memberapi.exception.ErrorDetails;
 import api.thanks.memberapi.exception.MemberNotFoundException;
+import api.thanks.memberapi.exception.UnauthorisedException;
 import api.thanks.memberapi.model.Member;
 import api.thanks.memberapi.repository.MemberRepository;
 import com.datastax.driver.core.utils.UUIDs;
@@ -103,17 +104,29 @@ public class MemberApi {
         }
         throw new MemberNotFoundException("member not found");
     }
-    /*
-    @GetMapping("/validate/{email}/{password}")
-    public ResponseEntity validateUser(@PathVariable("email") String user,@PathVariable("password")String password){
-        Member m = memberRepository.getMemberByEmailAndPassword("")
-        return ResponseEntity.ok().body(true);
-    }*/
+
+    @GetMapping("/members/validate/{empid}/{password}")
+    public ResponseEntity validateUser(@PathVariable("empid") String empid,@PathVariable("password")String password) {
+        //TODO do this based on security compliance
+        String b = Base64.getEncoder().encodeToString(password.getBytes());
+        Member m = memberRepository.findByEmpIdAndPassword(empid,b);
+        if(m!=null){
+            m.setPassword(null);
+            return ResponseEntity.ok().body(m);
+        }
+        throw new UnauthorisedException("member not found");
+    }
 
     @ExceptionHandler(MemberNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public final ResponseEntity MemberNotFoundExceptionHandler(MemberNotFoundException e) {
+    public final ResponseEntity memberNotFoundExceptionHandler(MemberNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON_UTF8).body(jsonKeyConstant + e.getMessage() + "\"}");
+    }
+
+    @ExceptionHandler(UnauthorisedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public final ResponseEntity unAuthorised(UnauthorisedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON_UTF8).body(jsonKeyConstant + e.getMessage() + "\"}");
     }
 
     private List parseTechnology(String data){
