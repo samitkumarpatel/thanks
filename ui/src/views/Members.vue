@@ -7,6 +7,7 @@
             <Success :success="response"/>
         </section>
         <section v-else>
+            <Alert />
             <div class="row">
                 <div class="col">
                         <form v-on:submit.prevent="submit">
@@ -82,7 +83,7 @@
                             <ul>
                                 <li v-for="(ve,index) of validationError" :key="index">{{ve}}</li>
                             </ul>
-                            <button type="submit" class="btn btn-primary">Signup</button>
+                            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Signup</button>
                         </form>
                 </div>
                 <div class="col-4">
@@ -95,14 +96,15 @@
 
 <script>
 import ApplicationError from "@/components/ApplicationError.vue";
-import MemberApiService from "@/service/member.service.js"
-import TeamApiService from "@/service/team.service.js"
-import Member from "@/service/member.js"
-import Success from "@/views/Success.vue"
+import MemberApiService from "@/service/member.service.js";
+import TeamApiService from "@/service/team.service.js";
+import Member from "@/service/member.js";
+import Success from "@/views/Success.vue";
+import Alert from "@/views/Alert.vue";
 export default {
   name: "members",
   components: {
-    ApplicationError,Success
+    ApplicationError,Success,Alert
   },
   data() {
     return {

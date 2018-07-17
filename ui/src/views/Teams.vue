@@ -27,7 +27,9 @@
                                 <label for="inputState">admin</label>
                                 <select id="inputState" class="form-control" v-model="team.adminUid">
                                     <option disabled value="">Choose a admin...</option>
+                                    <option :value="m.id" v-for="m of members" :key="m.id">{{m.firstname}}</option>
                                 </select>
+                                <label for="admin-error" v-if="memberError" style="color:red">we are having an issue during fetching members , please try after some time</label>
                             </div>
                             <div class="form-group col-md-2">
                                
@@ -45,7 +47,8 @@
 <script>
 import ApplicationError from '@/components/ApplicationError.vue';
 import TeamApiService from "@/service/team.service.js";
-import Success from "@/views/Success.vue"
+import Success from "@/views/Success.vue";
+import MemberApiService from "@/service/member.service.js"
 export default {
     name : 'teams',
     components: {
@@ -56,6 +59,8 @@ export default {
             title: 'Fill to create a team',
             errorTxt: {},
             data: null,
+            members : [],
+            memberError:false,
             team : {
                 teamid : null,
                 name : null,
@@ -82,7 +87,14 @@ export default {
             })
         }
     },created : function(){
-      
+        var that=this;
+        MemberApiService.getAll(function(res,err){
+            if(err){
+               that.memberError=true;     
+            }else{
+                that.members=res.data;
+            }
+        });
     }
 }
 </script>
