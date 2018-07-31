@@ -101,6 +101,7 @@ import TeamApiService from "@/service/team.service.js";
 import Member from "@/service/member.js";
 import Success from "@/views/Success.vue";
 import Alert from "@/views/Alert.vue";
+import JWTLoginService from "@/service/jwtLogin.service.js";
 export default {
   name: "members",
   components: {

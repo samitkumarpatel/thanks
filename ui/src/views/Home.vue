@@ -36,6 +36,7 @@ import MemberApiService from "@/service/member.service.js";
 import Profile from "@/components/Profile.vue";
 import History from "@/components/History.vue";
 import Points from "@/components/Points.vue";
+import JWTLoginService from "@/service/jwtLogin.service.js";
 export default {
   name: "home",
   components: {
