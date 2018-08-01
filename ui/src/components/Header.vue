@@ -30,6 +30,7 @@
 </template>
 
 <script>
+    import JWTLoginService from "@/service/jwtLogin.service.js";
     export default {
         name: "application_header",
         data() {
@@ -42,6 +43,7 @@
             },
             logout(){
                 this.$store.commit("setMemberId", null);
+                JWTLoginService.removeJWTfromLocalStorage();
                 this.$router.push("/login");
             }
         },

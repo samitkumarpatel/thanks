@@ -24,7 +24,7 @@ const JWTLoginService = {
         return window.localStorage.setItem("jwtToken",token);
     },
     removeJWTfromLocalStorage(){
-        return window.localStorage.removeItem("jwtToken");
+        window.localStorage.removeItem("jwtToken");
     }
 }
 export default JWTLoginService

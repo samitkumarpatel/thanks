@@ -4,6 +4,7 @@ import api.thanks.jwtsecurity.model.Member;
 import api.thanks.jwtsecurity.model.User;
 import api.thanks.jwtsecurity.repository.MemberRepository;
 import api.thanks.jwtsecurity.utility.JWTGenerator;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Base64;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/auth")
@@ -29,7 +31,9 @@ public class LoginController {
 
     @Value("${super.secreat.key}")
     private String privateKey;
+
     private String responseBody = "{\n" +"  \"jsonToken\" : \"";
+
     @GetMapping({"/logon","/"})
     public String logon(Model model) {
         model.addAttribute("user", new User());
@@ -63,5 +67,12 @@ public class LoginController {
                 .ok()
                 .header("Set-Cookie", "jwtToken=null;Max-Age=-1")
                 .body("ok");
+    }
+
+    @GetMapping("/parse")
+    public ResponseEntity parse(@RequestParam String jwtToken) {
+        return ResponseEntity
+                .ok()
+                .body(Jwts.parser().setSigningKey(privateKey).parseClaimsJws(jwtToken).getBody());
     }
 }

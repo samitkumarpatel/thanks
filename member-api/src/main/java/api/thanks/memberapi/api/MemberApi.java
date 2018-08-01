@@ -28,17 +28,14 @@ public class MemberApi {
 
     private static String jsonKeyConstant = "{\"error\": \"";
 
-    //TODO possibli merge both resources
-    @GetMapping("/members/all")
+    @GetMapping("/members")
     public ResponseEntity getAll(){
         log.log(Level.INFO, "Invoked getAll");
         return ResponseEntity.ok().body(memberRepository.findAll());
     }
 
-    @GetMapping("/members/byId")
-    public ResponseEntity getMember(){
-        //TODO fixme
-        UUID id = UUIDs.timeBased();
+    @GetMapping("/members/{id}")
+    public ResponseEntity getMember(@PathVariable UUID id){
         log.log(Level.INFO,"Invoked getMember for :{0} ",id);
         Member m = memberRepository.findMemberById(id);
         if(m!=null){
@@ -46,9 +43,6 @@ public class MemberApi {
         }
         throw new MemberNotFoundException("member not found");
     }
-    //TODO possibli merge both resources
-
-
 
     @GetMapping("/members/filter")
     public ResponseEntity getMemberByTeamId(@RequestParam UUID teamId){

@@ -22,7 +22,7 @@ public class JWTGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret)
-                .setExpiration(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+(60*60*1000))) //will expire in next one hr
                 .compact();
     }
 

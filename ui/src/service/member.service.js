@@ -2,22 +2,22 @@ import Vue from 'vue'
 import axios from 'axios'
 import {MEMBERS_API_URL} from '@/service/config.js'
 import JWTLoginService from "@/service/jwtLogin.service.js";
-const instance = axios.create({
-    baseURL: MEMBERS_API_URL,
-    timeout: 1000,
-    headers: {'JWT_TOKEN': JWTLoginService.getJWTfromLocalStorage()}
-});
 
 const MemberApiService = {
     getAll(callback){
         axios
-            .get(MEMBERS_API_URL+"/all")
+            .get(MEMBERS_API_URL)
             .then(function(response){callback(response,null)})
             .catch(function(error){callback(null,error)})
     },
     getById(memberId,callback){
-        instance
-            .get("/byId")
+        let axiosConfig = {
+            headers: {
+                'JWT_TOKEN': JWTLoginService.getJWTfromLocalStorage()
+            }
+        };
+        axios
+            .get(MEMBERS_API_URL+"/"+memberId,axiosConfig)
             .then(function(response){callback(response,null)})
             .catch(function(error){callback(null,error)})
     },
@@ -45,6 +45,14 @@ const MemberApiService = {
             .get(MEMBERS_API_URL+"/validate/"+empId+"/"+password)
             .then(function(response){callback(response,null)})
             .catch(function(error){callback(null,error)})
+    },
+    prepareHeaders() {
+        let axiosConfig = {
+            headers: {
+                'JWT_TOKEN': JWTLoginService.getJWTfromLocalStorage()
+            }
+        };
+        return axiosConfig;
     }
 }
 export default MemberApiService
