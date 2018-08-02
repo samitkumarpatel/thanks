@@ -59,23 +59,26 @@ export default {
     },
     init() {
       var that = this;
-      //service call
-      MemberApiService.getById(this.memberId, function(res,err) {
-        if (err) {
-          that.hasError(err);
+      JWTLoginService.parseJWT(function(res,err){
+        if(err) {
           that.$router.push("/login");
         } else {
-          that.member = res.data;
+          that.$store.commit("setMemberId", res.data.member.id);
+          //findout a way how to do that?
+          MemberApiService.getById(res.data.member.id, function(res,err) {
+            if (err) {
+              that.hasError(err);
+            } else {
+              that.member = res.data;
+              that.$store.commit("setMemberDetails",that.member);
+            }
+          });
         }
       });
     }
   },
   created: function() {
     this.init();
-  },computed: {
-    memberId() {
-        return this.$store.state.memberId; 
-    }
   }
 };
 </script>

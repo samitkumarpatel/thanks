@@ -40,7 +40,7 @@ class SecurityFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		HttpServletResponse res = (HttpServletResponse) servletResponse;
-		
+
 		System.out.println("*****JWT_TOKEN****"+req.getHeader("JWT_TOKEN"));
 		filterChain.doFilter(servletRequest, servletResponse);
 	}

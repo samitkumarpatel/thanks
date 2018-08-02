@@ -33,7 +33,7 @@ public class MemberApi {
         log.log(Level.INFO, "Invoked getAll");
         return ResponseEntity.ok().body(memberRepository.findAll());
     }
-
+    
     @GetMapping("/members/{id}")
     public ResponseEntity getMember(@PathVariable UUID id){
         log.log(Level.INFO,"Invoked getMember for :{0} ",id);
