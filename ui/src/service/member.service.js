@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
 import {MEMBERS_API_URL} from '@/service/config.js'
+import JWTLoginService from "@/service/jwtLogin.service.js";
+
 const MemberApiService = {
     getAll(callback){
         axios
@@ -9,8 +11,13 @@ const MemberApiService = {
             .catch(function(error){callback(null,error)})
     },
     getById(memberId,callback){
+        let axiosConfig = {
+            headers: {
+                'JWT_TOKEN': JWTLoginService.getJWTfromLocalStorage()
+            }
+        };
         axios
-            .get(MEMBERS_API_URL+"/"+memberId)
+            .get(MEMBERS_API_URL+"/"+memberId,axiosConfig)
             .then(function(response){callback(response,null)})
             .catch(function(error){callback(null,error)})
     },
@@ -38,6 +45,20 @@ const MemberApiService = {
             .get(MEMBERS_API_URL+"/validate/"+empId+"/"+password)
             .then(function(response){callback(response,null)})
             .catch(function(error){callback(null,error)})
+    },
+    prepareHeaders() {
+        let axiosConfig = {
+            headers: {
+                'JWT_TOKEN': JWTLoginService.getJWTfromLocalStorage()
+            }
+        };
+        return axiosConfig;
+    },
+    addRewardPoints(id,callback){
+        axios
+            .post(MEMBERS_API_URL+"/"+id+"/points")
+            .then(function(response){callback(response,null)})
+            .catch(function(error){callback(null,error)}) 
     }
 }
 export default MemberApiService

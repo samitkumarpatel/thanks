@@ -36,6 +36,7 @@ import MemberApiService from "@/service/member.service.js";
 import Profile from "@/components/Profile.vue";
 import History from "@/components/History.vue";
 import Points from "@/components/Points.vue";
+import JWTLoginService from "@/service/jwtLogin.service.js";
 export default {
   name: "home",
   components: {
@@ -58,23 +59,29 @@ export default {
     },
     init() {
       var that = this;
-      //service call
-      MemberApiService.getById(this.memberId, function(res,err) {
-        if (err) {
-          that.hasError(err);
+      JWTLoginService.parseJWT(function(res,err){
+        if(err) {
           that.$router.push("/login");
         } else {
+          that.$store.commit("setMemberId", res.data.member.id);
+          that.getMemberById(res.data.member.id);
+        }
+      });
+    },
+    getMemberById(memberId) {
+      var that = this;
+      MemberApiService.getById(memberId, function(res,err) {
+        if (err) {
+          that.hasError(err);
+        } else {
           that.member = res.data;
+          that.$store.commit("setMemberDetails",res.data);
         }
       });
     }
   },
   created: function() {
     this.init();
-  },computed: {
-    memberId() {
-        return this.$store.state.memberId; 
-    }
   }
 };
 </script>

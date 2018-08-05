@@ -24,6 +24,8 @@
 <script>
 import ApplicationError from "@/components/ApplicationError.vue";
 import MemberApiService from "@/service/member.service.js";
+import JWTLoginService from "@/service/jwtLogin.service.js";
+
 export default {
   name: "login",
   components: {
@@ -40,6 +42,7 @@ export default {
   methods: {
     doLogin() {
       var that = this;
+      /*
       MemberApiService.logon(this.empid, this.password, function(res, err) {
         if (err) {
           that.authenticationError = true;
@@ -49,6 +52,18 @@ export default {
         } else {
           that.$store.commit("setMemberId", res.data.id);
           that.$store.commit("setMemberDetails",res.data);
+          that.$router.push("/");
+        }
+      });*/
+      JWTLoginService.login(this.empid,this.password,function(res,err){
+        if(err){
+          that.authenticationError = true;
+          that.status = err.status;
+          that.empid=null;
+          that.password=null;
+        }else{
+          JWTLoginService.setJWTInLocalStorage(res.data.jsonToken);
+          that.$store.commit("setJwtToken", res.data.jsonToken);
           that.$router.push("/");
         }
       });

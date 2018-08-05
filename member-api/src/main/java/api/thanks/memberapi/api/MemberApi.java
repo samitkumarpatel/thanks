@@ -1,23 +1,16 @@
 package api.thanks.memberapi.api;
 
-import api.thanks.memberapi.exception.ErrorDetails;
 import api.thanks.memberapi.exception.MemberNotFoundException;
 import api.thanks.memberapi.exception.UnauthorisedException;
 import api.thanks.memberapi.model.Member;
 import api.thanks.memberapi.repository.MemberRepository;
 import com.datastax.driver.core.utils.UUIDs;
-import com.kenai.jnr.x86asm.Mem;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.cassandra.repository.AllowFiltering;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
-import java.lang.reflect.Array;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,6 +73,8 @@ public class MemberApi {
         throw new MemberNotFoundException("member not found");
     }
 
+    //TODO add some security around PUT and DELETE
+
     @PutMapping("/members/{id}")
     public ResponseEntity updateMember(@PathVariable("id") UUID id,@RequestBody Member member){
         //TODO need to be refactor
@@ -103,18 +98,6 @@ public class MemberApi {
             return ResponseEntity.ok().body(id+"- deleted successfully");
         }
         throw new MemberNotFoundException("member not found");
-    }
-
-    @GetMapping("/members/validate/{empid}/{password}")
-    public ResponseEntity validateUser(@PathVariable("empid") String empid,@PathVariable("password")String password) {
-        //TODO do this based on security compliance
-        String b = Base64.getEncoder().encodeToString(password.getBytes());
-        Member m = memberRepository.findByEmpIdAndPassword(empid,b);
-        if(m!=null){
-            m.setPassword(null);
-            return ResponseEntity.ok().body(m);
-        }
-        throw new UnauthorisedException("member not found");
     }
 
     @ExceptionHandler(MemberNotFoundException.class)

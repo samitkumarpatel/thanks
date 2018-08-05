@@ -19,7 +19,7 @@
                         <router-link to="/members" class="nav-link">Member</router-link>
                     </li>
                     <li class="nav-item">
-                        <a @click="login" class="nav-link" v-if="!memberId">login</a>
+                        <a @click="login" class="nav-link" v-if="memberDetails==null">login</a>
                         <a @click="logout" class="nav-link" v-else>({{memberDetails.firstname}}) | logout</a>
                     </li>
                 </ul>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+    import JWTLoginService from "@/service/jwtLogin.service.js";
     export default {
         name: "application_header",
         data() {
@@ -42,13 +43,12 @@
             },
             logout(){
                 this.$store.commit("setMemberId", null);
+                this.$store.commit("setMemberDetails", null);
+                JWTLoginService.removeJWTfromLocalStorage();
                 this.$router.push("/login");
             }
         },
         computed: {
-            memberId() {
-                return this.$store.state.memberId; 
-            },
             memberDetails(){
                 return this.$store.state.memberDetails;
             }

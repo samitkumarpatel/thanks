@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     memberId : null,
-    memberDetails : null
+    memberDetails : null,
+    jwtToken : null
   },
   mutations: {
     setMemberId(state,payload){
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     setMemberDetails(state,payload){
       state.memberDetails=payload;
+    },
+    setJwtToken(state,payload){
+      state.jwtToken=payload;
     }
   }
 })
