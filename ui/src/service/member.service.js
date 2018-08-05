@@ -53,6 +53,12 @@ const MemberApiService = {
             }
         };
         return axiosConfig;
+    },
+    addRewardPoints(id,callback){
+        axios
+            .post(MEMBERS_API_URL+"/"+id+"/points")
+            .then(function(response){callback(response,null)})
+            .catch(function(error){callback(null,error)}) 
     }
 }
 export default MemberApiService

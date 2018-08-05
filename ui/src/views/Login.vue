@@ -57,7 +57,7 @@ export default {
       });*/
       JWTLoginService.login(this.empid,this.password,function(res,err){
         if(err){
-          hat.authenticationError = true;
+          that.authenticationError = true;
           that.status = err.status;
           that.empid=null;
           that.password=null;
