@@ -33,7 +33,7 @@ public class MemberApi {
         log.log(Level.INFO, "Invoked getAll");
         return ResponseEntity.ok().body(memberRepository.findAll());
     }
-    
+
     @GetMapping("/members/{id}")
     public ResponseEntity getMember(@PathVariable UUID id){
         log.log(Level.INFO,"Invoked getMember for :{0} ",id);
@@ -73,6 +73,8 @@ public class MemberApi {
         throw new MemberNotFoundException("member not found");
     }
 
+    //TODO add some security around PUT and DELETE
+
     @PutMapping("/members/{id}")
     public ResponseEntity updateMember(@PathVariable("id") UUID id,@RequestBody Member member){
         //TODO need to be refactor
@@ -96,18 +98,6 @@ public class MemberApi {
             return ResponseEntity.ok().body(id+"- deleted successfully");
         }
         throw new MemberNotFoundException("member not found");
-    }
-
-    @GetMapping("/members/validate/{empid}/{password}")
-    public ResponseEntity validateUser(@PathVariable("empid") String empid,@PathVariable("password")String password) {
-        //TODO do this based on security compliance
-        String b = Base64.getEncoder().encodeToString(password.getBytes());
-        Member m = memberRepository.findByEmpIdAndPassword(empid,b);
-        if(m!=null){
-            m.setPassword(null);
-            return ResponseEntity.ok().body(m);
-        }
-        throw new UnauthorisedException("member not found");
     }
 
     @ExceptionHandler(MemberNotFoundException.class)

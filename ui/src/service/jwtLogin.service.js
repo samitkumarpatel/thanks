@@ -34,7 +34,7 @@ const JWTLoginService = {
     removeJWTfromLocalStorage(){
         window.localStorage.removeItem("jwtToken");
     },
-    parseJWT(callback){
+    parseJWT(callback) {
         var url = JWTLOGIN_API_URL+"/parse?jwtToken="+this.getJWTfromLocalStorage();
         var that=this;
         axios

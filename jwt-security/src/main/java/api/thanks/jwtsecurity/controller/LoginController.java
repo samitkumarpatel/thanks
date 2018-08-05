@@ -65,14 +65,24 @@ public class LoginController {
         session.invalidate();
         return ResponseEntity
                 .ok()
-                .header("Set-Cookie", "jwtToken=null;Max-Age=-1")
+                .header("Set-Cookie", "jwtToken=NOT_A_VALID_COOKIE;Max-Age=-1")
                 .body("ok");
     }
 
     @GetMapping("/parse")
     public ResponseEntity parse(@RequestParam String jwtToken) {
-        return ResponseEntity
-                .ok()
-                .body(Jwts.parser().setSigningKey(privateKey).parseClaimsJws(jwtToken).getBody());
+
+        if(jwtToken!=null && !"null".equals(jwtToken)) {
+            return ResponseEntity
+                    .ok()
+                    .body(Jwts.parser()
+                            .setSigningKey(privateKey)
+                            .parseClaimsJws(jwtToken)
+                            .getBody()
+                    );
+        }else {
+            return ResponseEntity.status(401).body("not authorised");
+        }
+
     }
 }

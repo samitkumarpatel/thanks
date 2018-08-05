@@ -64,15 +64,18 @@ export default {
           that.$router.push("/login");
         } else {
           that.$store.commit("setMemberId", res.data.member.id);
-          //findout a way how to do that?
-          MemberApiService.getById(res.data.member.id, function(res,err) {
-            if (err) {
-              that.hasError(err);
-            } else {
-              that.member = res.data;
-              that.$store.commit("setMemberDetails",that.member);
-            }
-          });
+          that.getMemberById(res.data.member.id);
+        }
+      });
+    },
+    getMemberById(memberId) {
+      var that = this;
+      MemberApiService.getById(memberId, function(res,err) {
+        if (err) {
+          that.hasError(err);
+        } else {
+          that.member = res.data;
+          that.$store.commit("setMemberDetails",res.data);
         }
       });
     }
