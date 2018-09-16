@@ -6,7 +6,7 @@
     <section id="tab__view" v-else>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link" id="home-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">History</a>
+          <a class="nav-link" id="home-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="true">Activity Stream</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
@@ -17,7 +17,7 @@
       </ul>
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-            <History :history="[1,2,3,4]"/>
+            <History :history="activitySteam"/>
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <Profile :profile="member"/>
@@ -49,7 +49,8 @@ export default {
       title: "dashboard",
       errorTxt: {},
       member: {},
-      histories:[]
+      histories:[],
+      activitySteam: []
     };
   },
   methods: {
@@ -70,6 +71,7 @@ export default {
           that.$store.commit("setMemberId", memberId);
           that.getMemberById(memberId);
           that.getRecentHistory(memberId);
+          that.getActivitySteam(memberId);
         }
       });
     },
@@ -86,11 +88,21 @@ export default {
     },
     getRecentHistory(memberId) {
       var that=this;
-      HistoryApiService.getHistory(memberId,function(res,err) {
+      HistoryApiService.toMe(memberId,function(res,err) {
           if(err){
               console.log(err);
           }else{
               that.histories = res.data;
+          }
+      });
+    },
+    getActivitySteam(memberId) {
+      var that=this;
+      HistoryApiService.toOther(memberId,function(res,err) {
+          if(err){
+              console.log(err);
+          }else{
+              that.activitySteam = res.data;
           }
       });
     }

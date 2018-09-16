@@ -17,10 +17,12 @@ import java.util.UUID;
 public class History {
     @PrimaryKey @Id
     private UUID id;
-    @Column("given_to")
-    private UUID givenTo;
-    @Column("got_from")
-    private UUID gotFrom;
+    @Column("member_id")
+    private UUID memberId;
+
+    @Column("to_member_id")
+    private UUID toMemberId;
+
     private int point;
     @Column("created_date")
     private Date createDate;

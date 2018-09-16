@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS member (
 
 CREATE TABLE IF NOT EXISTS history(
   id uuid PRIMARY KEY,
-  given_to uuid,
-  got_from uuid,
+  member_id uuid,
+  to_member_id uuid,
   point int,
   created_date timestamp
 );

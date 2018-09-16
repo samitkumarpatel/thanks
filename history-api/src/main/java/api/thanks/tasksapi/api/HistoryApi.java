@@ -4,6 +4,8 @@ import api.thanks.tasksapi.exception.HistoryNotFoundException;
 import api.thanks.tasksapi.model.History;
 import api.thanks.tasksapi.repository.HistoryRepository;
 import com.datastax.driver.core.utils.UUIDs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import java.util.UUID;
 @RequestMapping("/api/v1/history")
 @CrossOrigin("http://localhost:8080")
 public class HistoryApi {
+    Logger log = LoggerFactory.getLogger(HistoryApi.class);
+
     @Autowired
     HistoryRepository historyRepository;
 
@@ -32,14 +36,22 @@ public class HistoryApi {
         throw new HistoryNotFoundException(id+" - not found");
     }
 
-    @GetMapping("/gotform/{gotFrom}")
-    public ResponseEntity gotFrom(@PathVariable UUID gotFrom) {
-        return ResponseEntity.ok().body(historyRepository.findHistoryByGotFrom(gotFrom));
-    }
+    @GetMapping("/filter/{txn}/{id}")
+    public ResponseEntity gotFrom(
+            @PathVariable(value = "txn")String txn, @PathVariable(value = "id")UUID id ) {
 
-    @GetMapping("/givento/{givento}")
-    public ResponseEntity givenTo(@PathVariable UUID givento) {
-        return ResponseEntity.ok().body(historyRepository.findHistoryByGotFrom(givento));
+        //TO-ME  & FROM-OTHER
+
+        log.info("### filter invoked with txn: {} , for id: {} ",txn,id);
+        if("TO-ME".equals(txn)){
+            return ResponseEntity.ok().body(historyRepository.findHistoryGivenByMe(id));
+        }
+
+        if("FROM-OTHER".equals(txn)) {
+            return ResponseEntity.ok().body(historyRepository.findHistoryForMe(id));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping

@@ -15,9 +15,9 @@ const HistoryApiService = {
                 callback(null,error)
             })
     },
-    getHistory(memberId,callback) {
+    toMe(memberId,callback) {
         axios
-            .get(HISTORY_API_URL+"/filter?memberId="+memberId)
+            .get(HISTORY_API_URL+"/filter/TO-ME/"+memberId)
             .then(function(response){
                 callback(response,null)
             })
@@ -25,9 +25,20 @@ const HistoryApiService = {
                 callback(null,error)
             })
     },
-    save(memberId,callback) {
+    toOther(memberId,callback) {
+        axios
+            .get(HISTORY_API_URL+"/filter/FROM-OTHER/"+memberId)
+            .then(function(response){
+                callback(response,null)
+            })
+            .catch(function(error){
+                callback(null,error)
+            })
+    },
+    save(memberId,toMemberId,callback) {
         var history = {
             memberId : memberId,
+            toMemberId: toMemberId,
             point: POINT
         };
         axios

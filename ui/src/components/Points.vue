@@ -15,14 +15,16 @@
                     </div>
                     <div class="alert alert-success" role="alert" v-for="member of members" :key="member.id">
                         {{member.firstname}} {{member.lastname}} , ({{member.role}})
-                        <button type="button" class="btn btn-info" @click="addPoints(member.id)" v-if="memberId!=member.id">+</button>
+                        <button type="button" class="btn btn-info" @click="addPoints(memberId,member.id)" v-if="memberId!=member.id">+</button>
                     </div>
                 </section>
             </div>
             <div class="col">
-                <strong>Recently Got Point's From</strong>
+                <strong>My achievement from other</strong>
                 <hr/>
-                <p v-for="h of history" :key="h.id">({{h.createDate}}) - {{h.memberId}} - {{h.point}} </p>
+                <div class="alert alert-primary" role="alert" v-for="h of history" :key="h.id">
+                    <a href="#">member</a> given {{h.point}} point to me on ({{h.createDate}})
+                </div>
             </div>
         </div>
         
@@ -66,20 +68,20 @@
                     }
                 });
             },
-            addPoints(memberId) {
+            addPoints(memberId,toMemberId) {
                 var that=this;
-                MemberApiService.addRewardPoints(memberId,function(res,err) {
+                MemberApiService.addRewardPoints(toMemberId,function(res,err) {
                     if(err){
                         that.err=err;
                     } else {
                         //do something 
                     }
                 });
-                that.addHistory(memberId);
+                that.addHistory(memberId,toMemberId);
             },
-            addHistory(memberId) {
+            addHistory(memberId,toMemberId) {
                 var that=this;
-                HistoryApiService.save(memberId,function(res,err) {
+                HistoryApiService.save(memberId,toMemberId,function(res,err) {
                     if(err){
                         that.err=err;
                     } else {

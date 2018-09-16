@@ -16,13 +16,13 @@
                     </li>
                     <li class="nav-item">
                         <router-link to="/members" class="nav-link">Member</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <a @click="login" class="nav-link" v-if="memberDetails==null"><i class="material-icons">lock</i></a>
-                        <a @click="logout" class="nav-link" v-else><i class="material-icons">lock_open</i></a>
-                    </li>
+                    </li> 
                     <li class="nav-item" v-if="memberDetails!=null">
                         <span class="nav-link">{{memberDetails.firstname}} {{memberDetails.lastname}}</span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link" v-if="memberDetails==null" @click="login">login</span>
+                        <span class="nav-link" v-else @click="logout">logout</span>
                     </li>
                 </ul>
             </div>
