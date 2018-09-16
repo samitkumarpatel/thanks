@@ -33,12 +33,11 @@ CREATE TABLE IF NOT EXISTS member (
   created_date timestamp,
   update_date timestamp
 );
-insert into member(id, firstname,lastname,created_date) values (now(),'admin','admin','2018-06-27') 
-	USING TIMESTAMP 123456789;
 
 CREATE TABLE IF NOT EXISTS history(
   id uuid PRIMARY KEY,
-  member_uuid uuid,
+  given_to uuid,
+  got_from uuid,
   point int,
   created_date timestamp
 );

@@ -35,7 +35,7 @@ const MemberApiService = {
             .catch(function(error){callback(null,error)})
     },
     filter(filterString,callback){
-
+        
     },
     delete(id,callback){
         
@@ -54,7 +54,7 @@ const MemberApiService = {
         };
         return axiosConfig;
     },
-    addRewardPoints(id,callback){
+    addRewardPoints(id,callback) {
         axios
             .post(MEMBERS_API_URL+"/"+id+"/points")
             .then(function(response){callback(response,null)})

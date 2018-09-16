@@ -1,14 +1,16 @@
 <template>
     <div id="success">
         <div class="alert alert-success" role="alert" v-if="success">
-            <h4>SUCCESS!</h4>
+            <strong> <i class="material-icons">thumb_up_alt</i> Account successfully created with below details!</strong>
             <pre>{{success}}</pre>
         </div>
         <div v-if="component_type== 'MEMBER'">
             <p>Your default password is "changeme", don't forgot to change!</p>
         </div>
         <div>
-            <p><router-link to="/login">Click to login</router-link> | <a href="/home">home</a> </p> 
+            <p>
+                <router-link to="/login">Click to login</router-link>|<a href="/home">home</a>
+            </p> 
         </div>
     </div>
 </template>

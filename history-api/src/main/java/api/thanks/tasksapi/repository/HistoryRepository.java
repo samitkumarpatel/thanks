@@ -13,5 +13,8 @@ public interface HistoryRepository extends CassandraRepository<History, UUID> {
     History findHistoryById(UUID id);
 
     @AllowFiltering
-    List<History> findHistoryByMemberId(UUID memberId);
+    List<History> findHistoryByGivenTo(UUID memberId);
+
+    @AllowFiltering
+    List<History> findHistoryByGotFrom(UUID memberId);
 }

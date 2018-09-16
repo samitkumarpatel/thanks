@@ -15,14 +15,14 @@
                     </div>
                     <div class="alert alert-success" role="alert" v-for="member of members" :key="member.id">
                         {{member.firstname}} {{member.lastname}} , ({{member.role}})
-                        <button type="button" class="btn btn-info" @click="addPoints(member.id)">+</button>
+                        <button type="button" class="btn btn-info" @click="addPoints(member.id)" v-if="memberId!=member.id">+</button>
                     </div>
                 </section>
             </div>
             <div class="col">
-                <strong>Recent History</strong>
+                <strong>Recently Got Point's From</strong>
                 <hr/>
-                <p>yet to develop</p>
+                <p v-for="h of history" :key="h.id">({{h.createDate}}) - {{h.memberId}} - {{h.point}} </p>
             </div>
         </div>
         
@@ -31,6 +31,8 @@
 
 <script>
     import MemberApiService from "@/service/member.service.js"
+    import HistoryApiService from "@/service/history.service.js"
+
     export default {
         name : "points",
         props: {
@@ -38,6 +40,14 @@
                 type: Number,
                 default: 0
             },
+            history: {
+                type : Array,
+                default: []
+            },
+            memberId : {
+                type: String,
+                default: null
+            }
         },
         methods: {
             givePoint() {
@@ -46,7 +56,7 @@
                 }else{
                     this.givePointFlag=true;
                 }
-                //call all member for other thing
+                //call all member for point
                 var that=this;
                 MemberApiService.getAll(function(res,err){
                     if(err){
@@ -58,11 +68,22 @@
             },
             addPoints(memberId) {
                 var that=this;
-                MemberApiService.addRewardPoints(memberId,function(res,err){
+                MemberApiService.addRewardPoints(memberId,function(res,err) {
                     if(err){
                         that.err=err;
                     } else {
-                        console.log("done");
+                        //do something 
+                    }
+                });
+                that.addHistory(memberId);
+            },
+            addHistory(memberId) {
+                var that=this;
+                HistoryApiService.save(memberId,function(res,err) {
+                    if(err){
+                        that.err=err;
+                    } else {
+                        console.log('save history');
                     }
                 });
             }
@@ -73,7 +94,7 @@
                 err: null,
                 members: []
             }
-        },
+        }
     }
 </script>
 

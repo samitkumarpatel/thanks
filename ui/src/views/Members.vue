@@ -64,7 +64,7 @@
                                     <option v-for="team of teams" :key="team.id" :value="team.id">{{team.name}}</option>
                                 </select>
                                 <label v-if="teamError" style="color:red">
-                                    <small> we are facing issue to finding and creating team ! please try later.. </small>
+                                    <small> <i class="material-icons">error</i> we are facing issue to finding and creating team ! please try later.. </small>
                                 </label>
                                 <label for="createTeamLink" v-else>
                                     <small> not in the list? <router-link to="/teams">click</router-link> to create one</small>
@@ -99,6 +99,7 @@ import Member from "@/service/member.js";
 import Success from "@/views/Success.vue";
 import Alert from "@/views/Alert.vue";
 import JWTLoginService from "@/service/jwtLogin.service.js";
+
 export default {
   name: "members",
   components: {
@@ -143,7 +144,9 @@ export default {
         }
         if(this.member.technology) {
             var d = this.member.technology;
-            this.member.technology=d.split(',');
+            if(d!=undefined && d!="") {
+                this.member.technology=d.split(',');
+            }
         }
 
         //submit the form 

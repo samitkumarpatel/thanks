@@ -23,7 +23,7 @@
             <Profile :profile="member"/>
         </div>
         <div class="tab-pane fade show active" id="points" role="tabpanel" aria-labelledby="points-tab">
-            <Points :points="member.points"/>
+            <Points :points="member.points" :history="histories" :memberId="member.id"/>
         </div>
       </div>
     </section>
@@ -37,6 +37,8 @@ import Profile from "@/components/Profile.vue";
 import History from "@/components/History.vue";
 import Points from "@/components/Points.vue";
 import JWTLoginService from "@/service/jwtLogin.service.js";
+import HistoryApiService from "@/service/history.service.js";
+
 export default {
   name: "home",
   components: {
@@ -46,7 +48,8 @@ export default {
     return {
       title: "dashboard",
       errorTxt: {},
-      member: {}
+      member: {},
+      histories:[]
     };
   },
   methods: {
@@ -63,8 +66,10 @@ export default {
         if(err) {
           that.$router.push("/login");
         } else {
-          that.$store.commit("setMemberId", res.data.member.id);
-          that.getMemberById(res.data.member.id);
+          var memberId = res.data.member.id;
+          that.$store.commit("setMemberId", memberId);
+          that.getMemberById(memberId);
+          that.getRecentHistory(memberId);
         }
       });
     },
@@ -78,6 +83,16 @@ export default {
           that.$store.commit("setMemberDetails",res.data);
         }
       });
+    },
+    getRecentHistory(memberId) {
+      var that=this;
+      HistoryApiService.getHistory(memberId,function(res,err) {
+          if(err){
+              console.log(err);
+          }else{
+              that.histories = res.data;
+          }
+      });
     }
   },
   created: function() {
@@ -85,6 +100,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 div.col {
   text-align: center;

@@ -2,6 +2,7 @@ package api.thanks.memberapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +27,17 @@ public class MemberApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MemberApiApplication.class, args);
 	}
-}
+	@Bean
+	public FilterRegistrationBean<SecurityFilter> loggingFilter(){
+		FilterRegistrationBean<SecurityFilter> registrationBean
+				= new FilterRegistrationBean<>();
 
+		registrationBean.setFilter(new SecurityFilter());
+		registrationBean.addUrlPatterns("/users/*");
+
+		return registrationBean;
+	}
+}
 @Component
 class SecurityFilter implements Filter {
 

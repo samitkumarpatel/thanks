@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/teams")
 @CrossOrigin("http://localhost:8080")
 public class TeamApi {
 
@@ -23,12 +23,12 @@ public class TeamApi {
 
     private static String jsonKeyConstant = "{\"error\": \"";
 
-    @GetMapping("/teams")
+    @GetMapping
     public ResponseEntity getAll(){
         return ResponseEntity.ok().body(teamRepository.findAll());
     }
 
-    @GetMapping("/teams/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity getTeamById(@PathVariable UUID id){
         Team team = teamRepository.findTeamById(id);
         if(team!=null){
@@ -37,14 +37,14 @@ public class TeamApi {
         throw new TeamNotFoundException(id+"- not found");
     }
 
-    @PostMapping("/teams")
+    @PostMapping
     public ResponseEntity saveTeam(@RequestBody Team team){
         team.setId(UUIDs.timeBased());
         team.setCreateDate(new Date(System.currentTimeMillis()));
         return ResponseEntity.ok().body(teamRepository.save(team));
     }
 
-    @PutMapping("/teams/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity updateTeam(@PathVariable UUID id,@RequestBody Team team){
         Team t = teamRepository.findTeamById(id);
         if(t!=null && t.getId().equals(team.getId())){
@@ -53,7 +53,7 @@ public class TeamApi {
         throw new TeamNotFoundException(id+" - not found");
     }
 
-    @DeleteMapping("/teams/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteTeam(@PathVariable UUID id){
         Team team = teamRepository.findTeamById(id);
         if(team!=null){

@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/members")
 @CrossOrigin("http://localhost:8080")
 public class MemberApi {
 
@@ -28,13 +28,13 @@ public class MemberApi {
 
     private static String jsonKeyConstant = "{\"error\": \"";
 
-    @GetMapping("/members")
+    @GetMapping
     public ResponseEntity getAll(){
         log.log(Level.INFO, "Invoked getAll");
         return ResponseEntity.ok().body(memberRepository.findAll());
     }
 
-    @GetMapping("/members/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity getMember(@PathVariable UUID id){
         log.log(Level.INFO,"Invoked getMember for :{0} ",id);
         Member m = memberRepository.findMemberById(id);
@@ -44,7 +44,7 @@ public class MemberApi {
         throw new MemberNotFoundException("member not found");
     }
 
-    @GetMapping("/members/filter")
+    @GetMapping("/filter")
     public ResponseEntity getMemberByTeamId(@RequestParam UUID teamId){
         log.log(Level.INFO,"Invoked getMemberByTeamId for teamId :{0} ",teamId);
         List<Member> members = memberRepository.findMemberByTeamId(teamId);
@@ -54,7 +54,7 @@ public class MemberApi {
         throw new MemberNotFoundException("member not found");
     }
 
-    @PostMapping("/members")
+    @PostMapping
     public ResponseEntity saveMember(@RequestBody Member member){
         member.setId(UUIDs.timeBased());
         member.setCreatedDate(new Date(System.currentTimeMillis()));
@@ -63,7 +63,7 @@ public class MemberApi {
         return ResponseEntity.ok().body(memberRepository.save(member));
     }
 
-    @PostMapping("/members/{id}/points")
+    @PostMapping("/{id}/points")
     public ResponseEntity increasePoints(@PathVariable("id") UUID id){
         Member m = memberRepository.findMemberById(id);
         if(m!=null && m.getId().equals(id)){
@@ -75,7 +75,7 @@ public class MemberApi {
 
     //TODO add some security around PUT and DELETE
 
-    @PutMapping("/members/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity updateMember(@PathVariable("id") UUID id,@RequestBody Member member){
         //TODO need to be refactor
         Member expectedMember = memberRepository.findMemberById(id);
@@ -90,7 +90,7 @@ public class MemberApi {
         throw new MemberNotFoundException("member not found");
     }
 
-    @DeleteMapping("/members/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity deleteMember(@PathVariable("id") UUID id){
         Member expectedMember = memberRepository.findMemberById(id);
         if(expectedMember !=null && expectedMember.getId().equals(id)){

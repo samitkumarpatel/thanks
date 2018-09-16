@@ -7,7 +7,6 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-               
                 <ul class="navbar-nav ml-auto">
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -19,11 +18,13 @@
                         <router-link to="/members" class="nav-link">Member</router-link>
                     </li>
                     <li class="nav-item">
-                        <a @click="login" class="nav-link" v-if="memberDetails==null">login</a>
-                        <a @click="logout" class="nav-link" v-else>({{memberDetails.firstname}}) | logout</a>
+                        <a @click="login" class="nav-link" v-if="memberDetails==null"><i class="material-icons">lock</i></a>
+                        <a @click="logout" class="nav-link" v-else><i class="material-icons">lock_open</i></a>
+                    </li>
+                    <li class="nav-item" v-if="memberDetails!=null">
+                        <span class="nav-link">{{memberDetails.firstname}} {{memberDetails.lastname}}</span>
                     </li>
                 </ul>
-                
             </div>
         </nav>
     </div>
