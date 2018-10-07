@@ -24,6 +24,13 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus3</id>
+            <url>http://192.168.33.10:10002</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
